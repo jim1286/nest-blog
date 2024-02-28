@@ -8,12 +8,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/signin')
-  signIn(@Body(ValidationPipe) signInDto: UserDto.SignInDto) {
-    return this.userService.signIn();
+  signIn(
+    @Body(ValidationPipe) signInDto: UserDto.SignInDto,
+  ): Promise<AuthResponse.SignIn> {
+    return this.userService.signIn(signInDto);
   }
 
   @Post('/signup')
   signUp(@Body(ValidationPipe) signUpDto: UserDto.SignUpDto) {
-    return this.userService.signUp();
+    return this.userService.signUp(signUpDto);
   }
 }

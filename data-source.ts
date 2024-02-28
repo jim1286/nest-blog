@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
+import { DataSource } from 'typeorm';
 
 dotenv.config({ path: `.env.dev` });
 

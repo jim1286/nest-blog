@@ -1,16 +1,74 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { UserDto } from '../dto';
+import { v4 as uuid } from 'uuid';
+import * as bcrypt from 'bcrypt';
+import { TokenPayload } from '../interface/token.interface';
+import { TokenStrategy } from '../strategy/token.strategy';
+import { AuthResponse } from '../response';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly tokenStrategy: TokenStrategy,
   ) {}
 
-  async signUp() {}
+  async signIn(body: UserDto.SignInDto): Promise<AuthResponse.SignIn> {
+    const { userName, password } = body;
 
-  async signIn() {}
+    const user = await this.userRepository.findOne({ where: { userName } });
+
+    if (!user) {
+      throw new BadRequestException('유저가 존재하지 않습니다.');
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+      throw new BadRequestException('비밀번호가 맞지 않습니다.');
+    }
+
+    const payload: TokenPayload = {
+      user: user.name,
+      userName,
+    };
+
+    const accessToken = await this.tokenStrategy.getAccessToken(payload);
+    const refreshToken = await this.tokenStrategy.getRefreshToken(payload);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async signUp(body: UserDto.SignUpDto) {
+    const { name, userName, password } = body;
+
+    const isUserNameExist = await this.userRepository.findOne({
+      where: { userName },
+    });
+
+    if (isUserNameExist) {
+      throw new BadRequestException('동일한 유저 아이디가 존재합니다.');
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const createUser = {
+      userId: uuid(),
+      name,
+      userName,
+      password: hashedPassword,
+    };
+
+    await this.userRepository.save(createUser);
+
+    return '생성완료';
+  }
 }
