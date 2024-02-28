@@ -20,3 +20,14 @@ export class SignUpDto {
   @IsString()
   password: string;
 }
+
+export class GetUserDto {
+  @IsString()
+  userId: string;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  userName: string;
+}

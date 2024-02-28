@@ -1,7 +1,16 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDto } from '../dto';
-import { AuthResponse } from '../response';
+import { AuthGuard } from '../guard/auth.guard';
+import { GetUser } from '../decorator/getUser.decorator';
+import { UserResponse } from '../response';
 
 @Controller('user')
 export class UserController {
@@ -10,12 +19,18 @@ export class UserController {
   @Post('/signin')
   signIn(
     @Body(ValidationPipe) signInDto: UserDto.SignInDto,
-  ): Promise<AuthResponse.SignIn> {
+  ): Promise<UserResponse.SignIn> {
     return this.userService.signIn(signInDto);
   }
 
   @Post('/signup')
   signUp(@Body(ValidationPipe) signUpDto: UserDto.SignUpDto) {
     return this.userService.signUp(signUpDto);
+  }
+
+  @Get('/')
+  @UseGuards(AuthGuard)
+  getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
+    return this.userService.getUser(user);
   }
 }

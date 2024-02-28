@@ -1,1 +1,1 @@
-export * as AuthResponse from './auth.response';
+export * as UserResponse from './user.response';
