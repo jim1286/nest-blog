@@ -20,6 +20,11 @@ export class UserService {
   async signIn(body: UserDto.SignInDto): Promise<UserResponse.SignIn> {
     const { userName, password } = body;
     const user = await this.findUserByUsername(userName);
+
+    if (!user) {
+      throw new BadRequestException('유저가 존재하지 않습니다.');
+    }
+
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -85,10 +90,6 @@ export class UserService {
     const user = await this.userRepository.findOne({
       where: { userName },
     });
-
-    if (!user) {
-      throw new BadRequestException('유저가 존재하지 않습니다.');
-    }
 
     return user;
   }

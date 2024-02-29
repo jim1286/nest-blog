@@ -1,5 +1,5 @@
 import { UserService } from './../user/user.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
@@ -21,6 +21,10 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: TokenPayload, done: VerifiedCallback) {
     const { userName } = payload;
     const user = await this.userService.findUserByUsername(userName);
+
+    if (!user) {
+      throw new BadRequestException('유저가 존재하지 않습니다.');
+    }
 
     return done(null, user);
   }
