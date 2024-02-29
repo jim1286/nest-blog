@@ -30,7 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME  }}/velog-nest:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
           cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
           cache-to: type=gha,mode=max
 
