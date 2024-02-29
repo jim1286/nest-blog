@@ -18,8 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "schema:drop": "ts-node ./node_modules/typeorm/cli.js schema:drop -d ./data-source.ts",
-    "schema:sync": "ts-node ./node_modules/typeorm/cli.js schema:sync -d ./data-source.ts"
+    "schema:drop:dev": "cross-env NODE_ENV=dev ts-node ./node_modules/typeorm/cli.js schema:drop -d ./data-source.ts",
+    "schema:sync:dev": "cross-env NODE_ENV=dev ts-node ./node_modules/typeorm/cli.js schema:sync -d ./data-source.ts",
+    "schema:drop:prod": "cross-env NODE_ENV=prod ts-node ./node_modules/typeorm/cli.js schema:drop -d ./data-source.ts",
+    "schema:sync:prod": "cross-env NODE_ENV=prod ts-node ./node_modules/typeorm/cli.js schema:sync -d ./data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
