@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Docker Image CI/CD
 
 on:
   push:
@@ -34,18 +34,17 @@ jobs:
           cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
           cache-to: type=gha,mode=max
 
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: ssh connect & production
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.EC2_HOST }}
-  #         username: ${{ secrets.EC2_USERNAME }}
-  #         key: ${{ secrets.EC2_PRIVATE_KEY}}
-  #         port: ${{ secrets.EC2_PORT }}
-  #         script: |
-  #           sudo docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/velog-nest:latest
-  #           sudo docker run -d -p 3000:3000 ${{ secrets.DOCKER_HUBUSERNAME  }}/velog-nest:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh connect & production
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY}}
+          port: ${{ secrets.PORT }}
+          script: |
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/velog-nest:latest
+            sudo docker run -d -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME  }}/velog-nest:latest
