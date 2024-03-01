@@ -77,7 +77,7 @@ export class UserService {
       throw new BadRequestException('유저가 존재하지 않습니다.');
     }
 
-    const res = {
+    const res: UserResponse.GetUser = {
       userId: user.userId,
       name: user.name,
       userName: user.userName,
