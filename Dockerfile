@@ -3,8 +3,8 @@
 FROM node:lts-alpine
 
 # 명령어를 실행할 work directory 생성
-RUN mkdir -p /var/app
-WORKDIR /var/app
+RUN mkdir -p /app
+WORKDIR /app
 
 # 프로젝트 전체를 work directory에 추가
 COPY . .
