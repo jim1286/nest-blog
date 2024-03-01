@@ -46,5 +46,6 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY}}
           port: ${{ secrets.PORT }}
           script: |
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
-            docker run -d -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
+            docker run -d -p 3000:3000 --env-file ./.env ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
