@@ -19,4 +19,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the server using the production build
-CMD ["node","dist/src/main.js" ]
+CMD ["npm","run","start" ]
