@@ -1,0 +1,33 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+    ports:
+      - '${SERVER_PORT}:${DOCKER_PORT}'
+    networks:
+      - febnine-net
+    depends_on:
+      - mysql
+  mysql:
+    container_name: mysql-container
+    # mac m1칩의 경우
+    platform: linux/x86_64
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    networks:
+      - febnine-net
+    volumes:
+      - mysql:/var/lib/mysql-volume
+volumes:
+  mysql:
+networks:
+  febnine-net:
