@@ -1,24 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../interface/token.interface';
-import * as dotenv from 'dotenv';
-
-dotenv.config({ path: `.env.dev` });
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class TokenStrategy {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async getAccessToken(payload: TokenPayload): Promise<string> {
     return this.jwtService.sign(payload, {
-      secret: process.env.Access_Secret,
+      secret: this.configService.get('SECRET'),
       expiresIn: '10d',
     });
   }
 
   async getRefreshToken(payload: TokenPayload): Promise<string> {
     return this.jwtService.sign(payload, {
-      secret: process.env.Access_Secret,
+      secret: this.configService.get('SECRET'),
       expiresIn: '10d',
     });
   }
