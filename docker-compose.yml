@@ -6,9 +6,9 @@ services:
     environment:
       - DB_TYPE=mysql
       - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
       - DB_PORT=${DB_PORT}
     ports:
       - '${SERVER_PORT}:${DOCKER_PORT}'
@@ -21,6 +21,10 @@ services:
     # mac m1칩의 경우
     platform: linux/x86_64
     image: mysql:latest
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
     ports:
       - '3306:3306'
     networks:
