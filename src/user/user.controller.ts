@@ -38,7 +38,7 @@ export class UserController {
   }
 
   @Post('/')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     return this.userService.uploadFile(file);
   }
