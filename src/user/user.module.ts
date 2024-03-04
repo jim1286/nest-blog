@@ -4,8 +4,12 @@ import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy, TokenStrategy } from '@/strategy';
 import { UserEntity } from '@/entities';
+import { JwtStrategy } from '@/strategy/jwt.strategy';
+import { TokenStrategy } from '@/strategy/token.strategy';
+import { UtilModule } from '@/util/util.module';
+import { S3Service } from '@/s3/s3.service';
+import { UtilService } from '@/util/util.service';
 
 @Module({
   imports: [
@@ -20,8 +24,9 @@ import { UserEntity } from '@/entities';
         };
       },
     }),
+    UtilModule,
   ],
   controllers: [UserController],
-  providers: [UserService, TokenStrategy, JwtStrategy],
+  providers: [UserService, TokenStrategy, JwtStrategy, S3Service, UtilService],
 })
 export class UserModule {}

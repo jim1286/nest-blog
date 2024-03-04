@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -11,6 +13,7 @@ import { GetUser } from '@/decorator';
 import { UserDto } from '@/dto';
 import { UserResponse } from '@/response';
 import { CustomAuthGuard } from '@/guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
@@ -32,5 +35,11 @@ export class UserController {
   @UseGuards(CustomAuthGuard)
   getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
     return this.userService.getUser(user);
+  }
+
+  @Post('/')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.userService.uploadFile(file);
   }
 }

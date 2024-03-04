@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../entities/user.entity';
-import { UserDto } from '../dto';
-import { v4 as uuid } from 'uuid';
+import { UserResponse } from '@/response';
+import { UserDto } from '@/dto';
+import { UserEntity } from '@/entities';
+import { TokenPayload } from '@/interface';
+import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
-import { TokenPayload } from '../interface/token.interface';
-import { TokenStrategy } from '../strategy/token.strategy';
-import { UserResponse } from '../response';
+import { UtilService } from '@/util/util.service';
+import { S3Service } from '@/s3/s3.service';
 
 @Injectable()
 export class UserService {
@@ -15,6 +16,8 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly tokenStrategy: TokenStrategy,
+    private readonly utilService: UtilService,
+    private readonly s3Service: S3Service,
   ) {}
 
   async signIn(body: UserDto.SignInDto): Promise<UserResponse.SignIn> {
@@ -58,7 +61,7 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const createUser = {
-      userId: uuid(),
+      userId: this.utilService.getUUID(),
       name,
       userName,
       password: hashedPassword,
@@ -84,6 +87,19 @@ export class UserService {
     };
 
     return res;
+  }
+
+  async uploadFile(file: Express.Multer.File) {
+    const imageName = this.utilService.getUUID();
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.s3Service.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+
+    return { imageUrl };
   }
 
   async findUserByUsername(userName: string) {
