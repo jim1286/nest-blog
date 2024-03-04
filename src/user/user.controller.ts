@@ -7,10 +7,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from '../dto';
-import { AuthGuard } from '../guard/auth.guard';
-import { GetUser } from '../decorator/getUser.decorator';
-import { UserResponse } from '../response';
+import { GetUser } from '@/decorator';
+import { UserDto } from '@/dto';
+import { UserResponse } from '@/response';
+import { CustomAuthGuard } from '@/guard';
 
 @Controller('user')
 export class UserController {
@@ -29,7 +29,7 @@ export class UserController {
   }
 
   @Get('/')
-  @UseGuards(AuthGuard)
+  @UseGuards(CustomAuthGuard)
   getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
     return this.userService.getUser(user);
   }
