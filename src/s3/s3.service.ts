@@ -1,12 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { UtilService } from '@/util/util.service';
 
 @Injectable()
 export class S3Service {
   s3Client: S3Client;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly utilService: UtilService,
+  ) {
     // AWS S3 클라이언트 초기화. 환경 설정 정보를 사용하여 AWS 리전, Access Key, Secret Key를 설정.
     this.s3Client = new S3Client({
       region: this.configService.get('S3_REGION'), // AWS Region
@@ -15,6 +19,19 @@ export class S3Service {
         secretAccessKey: this.configService.get('S3_SECRET_ACCESS_KEY'), // Secret Key
       },
     });
+  }
+
+  async uploadImage(file: Express.Multer.File) {
+    const imageName = this.utilService.getUUID();
+    const ext = file.originalname.split('.').pop();
+
+    const imageUrl = await this.imageUploadToS3(
+      `${imageName}.${ext}`,
+      file,
+      ext,
+    );
+
+    return { imageUrl };
   }
 
   async imageUploadToS3(

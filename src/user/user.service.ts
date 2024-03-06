@@ -90,16 +90,7 @@ export class UserService {
   }
 
   async uploadFile(file: Express.Multer.File) {
-    const imageName = this.utilService.getUUID();
-    const ext = file.originalname.split('.').pop();
-
-    const imageUrl = await this.s3Service.imageUploadToS3(
-      `${imageName}.${ext}`,
-      file,
-      ext,
-    );
-
-    return { imageUrl };
+    return this.s3Service.uploadImage(file);
   }
 
   async findUserByUsername(userName: string) {
