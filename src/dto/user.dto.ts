@@ -10,9 +10,6 @@ export class SignInDto {
 
 export class SignUpDto {
   @IsString()
-  name: string;
-
-  @IsString()
   @MinLength(4)
   @MaxLength(20)
   userName: string;
@@ -24,9 +21,6 @@ export class SignUpDto {
 export class GetUserDto {
   @IsString()
   userId: string;
-
-  @IsString()
-  name: string;
 
   @IsString()
   userName: string;

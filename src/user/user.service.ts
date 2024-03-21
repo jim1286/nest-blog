@@ -36,7 +36,6 @@ export class UserService {
 
     const payload: TokenPayload = {
       userId: user.userId,
-      user: user.name,
       userName: user.userName,
     };
 
@@ -50,7 +49,7 @@ export class UserService {
   }
 
   async signUp(body: UserDto.SignUpDto) {
-    const { name, userName, password } = body;
+    const { userName, password } = body;
     const user = await this.findUserByUsername(userName);
 
     if (user) {
@@ -62,7 +61,6 @@ export class UserService {
 
     const createUser = {
       userId: this.utilService.getUUID(),
-      name,
       userName,
       password: hashedPassword,
     };
@@ -82,7 +80,6 @@ export class UserService {
 
     const res: UserResponse.GetUser = {
       userId: user.userId,
-      name: user.name,
       userName: user.userName,
     };
 
