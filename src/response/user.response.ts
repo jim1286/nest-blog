@@ -1,5 +1,5 @@
 export interface GetUser {
-  userId: string;
+  id: string;
   userName: string;
 }
 

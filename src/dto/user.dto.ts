@@ -20,7 +20,7 @@ export class SignUpDto {
 
 export class GetUserDto {
   @IsString()
-  userId: string;
+  id: string;
 
   @IsString()
   userName: string;

@@ -9,6 +9,7 @@ import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
 import { UtilService } from '@/util/util.service';
 import { S3Service } from '@/s3/s3.service';
+import { RoleEnum } from '@/enum';
 
 @Injectable()
 export class UserService {
@@ -35,7 +36,7 @@ export class UserService {
     }
 
     const payload: TokenPayload = {
-      userId: user.userId,
+      id: user.id,
       userName: user.userName,
     };
 
@@ -60,9 +61,10 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const createUser = {
-      userId: this.utilService.getUUID(),
-      userName,
+      id: this.utilService.getUUID(),
+      userName: userName,
       password: hashedPassword,
+      role: RoleEnum.USER,
     };
 
     await this.userRepository.save(createUser);
@@ -79,7 +81,7 @@ export class UserService {
     }
 
     const res: UserResponse.GetUser = {
-      userId: user.userId,
+      id: user.id,
       userName: user.userName,
     };
 

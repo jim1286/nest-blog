@@ -1,6 +1,6 @@
-import * as path from 'path';
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
+import { UserEntity } from '@/entities';
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
@@ -11,11 +11,8 @@ export const dataSource = new DataSource({
   database: process.env.DB_NAME,
   username: process.env.DB_USER, // MySQL 설치시 설정한 유저네임을 입력하면 됩니다,
   password: process.env.DB_PASSWORD, // MySQL 설치시 설정한 비밀번호를 입력하면 뒵니다.,
-  entities: [
-    // entity는 DB의 테이블을 지칭합니다. 따라서 어떤 테이블이 사용되는지. 테이블에 대한 정보를 가져오는 것.
-    path.join(__dirname, 'src/entities/**/*.entity.ts'),
-    path.join(__dirname, 'dist/entities/**/*.entity.js'),
-  ],
+  // entity는 DB의 테이블을 지칭합니다. 따라서 어떤 테이블이 사용되는지. 테이블에 대한 정보를 가져오는 것.
+  entities: [UserEntity],
   synchronize: false, // 이건 무조건 false로 해둡시다.
   logging: true, // typeorm 쿼리가 실행될 때, 터미널에 MySQL쿼리가 어떻게 짜여졌는지 보여줍니다.
 });
