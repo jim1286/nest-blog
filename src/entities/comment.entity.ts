@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { PostEntity, UserEntity } from '.';
 import { BaseEntity } from './base';
 
@@ -12,4 +12,10 @@ export class CommentEntity extends BaseEntity {
 
   @ManyToOne(() => PostEntity, (user) => user.comments)
   post: PostEntity;
+
+  @ManyToOne(() => CommentEntity, (comment) => comment.children)
+  parent: CommentEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.parent)
+  children: CommentEntity[];
 }
