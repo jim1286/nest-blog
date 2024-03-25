@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { UtilService } from '@/util/util.service';
+import { UtilStrategy } from '@/strategy';
 
 @Injectable()
 export class S3Service {
@@ -9,7 +9,7 @@ export class S3Service {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly utilService: UtilService,
+    private readonly utilStrategy: UtilStrategy,
   ) {
     // AWS S3 클라이언트 초기화. 환경 설정 정보를 사용하여 AWS 리전, Access Key, Secret Key를 설정.
     this.s3Client = new S3Client({
@@ -22,7 +22,7 @@ export class S3Service {
   }
 
   async uploadImage(file: Express.Multer.File) {
-    const imageName = this.utilService.getUUID();
+    const imageName = this.utilStrategy.getUUID();
     const ext = file.originalname.split('.').pop();
 
     const imageUrl = await this.imageUploadToS3(

@@ -3,18 +3,18 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@/entities';
-import { UtilModule } from '@/util/util.module';
-import { S3Service } from '@/s3/s3.service';
-import { UtilService } from '@/util/util.service';
-import { JwtStrategy, TokenStrategy } from '@/strategy';
+import { TokenStrategy, UtilStrategy } from '@/strategy';
+import { S3Module } from '@/s3/s3.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    S3Module,
+    PassportModule,
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.registerAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return {
@@ -23,9 +23,9 @@ import { JwtStrategy, TokenStrategy } from '@/strategy';
         };
       },
     }),
-    UtilModule,
   ],
   controllers: [UserController],
-  providers: [UserService, TokenStrategy, JwtStrategy, S3Service, UtilService],
+  providers: [UserService, TokenStrategy, UtilStrategy],
+  exports: [UserService],
 })
 export class UserModule {}

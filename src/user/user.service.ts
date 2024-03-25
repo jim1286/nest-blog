@@ -7,9 +7,9 @@ import { UserEntity } from '@/entities';
 import { TokenPayload } from '@/interface';
 import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
-import { UtilService } from '@/util/util.service';
 import { S3Service } from '@/s3/s3.service';
 import { RoleEnum } from '@/enum';
+import { UtilStrategy } from '@/strategy';
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,7 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly tokenStrategy: TokenStrategy,
-    private readonly utilService: UtilService,
+    private readonly utilStrategy: UtilStrategy,
     private readonly s3Service: S3Service,
   ) {}
 
@@ -61,7 +61,7 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const createUser = {
-      id: this.utilService.getUUID(),
+      id: this.utilStrategy.getUUID(),
       userName: userName,
       password: hashedPassword,
       role: RoleEnum.USER,

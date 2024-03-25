@@ -12,7 +12,7 @@ import { UserService } from './user.service';
 import { GetUser } from '@/decorator';
 import { UserDto } from '@/dto';
 import { UserResponse } from '@/response';
-import { CustomAuthGuard } from '@/guard';
+import { JwtAuthGuard } from '@/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
@@ -32,7 +32,7 @@ export class UserController {
   }
 
   @Get('/')
-  @UseGuards(CustomAuthGuard)
+  @UseGuards(JwtAuthGuard)
   getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
     return this.userService.getUser(user);
   }

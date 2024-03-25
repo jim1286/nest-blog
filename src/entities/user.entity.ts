@@ -1,6 +1,6 @@
-import { BaseEntity } from '@/base';
 import { RoleEnum } from '@/enum';
 import { Column, Entity, Unique } from 'typeorm';
+import { BaseEntity } from './base.entity';
 
 @Entity('User')
 @Unique(['userName'])

@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfigService } from './config';
 import { UserModule } from './user/user.module';
-import { UtilModule } from './util/util.module';
 import { S3Module } from './s3/s3.module';
 
 @Module({
@@ -17,7 +16,6 @@ import { S3Module } from './s3/s3.module';
       useClass: TypeOrmConfigService,
     }),
     UserModule,
-    UtilModule,
     S3Module,
   ],
 })
