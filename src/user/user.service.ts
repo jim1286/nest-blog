@@ -49,7 +49,7 @@ export class UserService {
     };
   }
 
-  async signUp(body: UserDto.SignUpDto) {
+  async signUp(body: UserDto.SignUpDto, file: Express.Multer.File) {
     const { userName, password } = body;
     const user = await this.findUserByUsername(userName);
 
@@ -59,11 +59,13 @@ export class UserService {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    const thumbnailUrl = (await this.s3Service.uploadImage(file)).imageUrl;
 
     const createUser = {
       id: this.utilStrategy.getUUID(),
       userName: userName,
       password: hashedPassword,
+      thumbnailUrl: thumbnailUrl,
       role: RoleEnum.USER,
     };
 
@@ -86,10 +88,6 @@ export class UserService {
     };
 
     return res;
-  }
-
-  async uploadFile(file: Express.Multer.File) {
-    return this.s3Service.uploadImage(file);
   }
 
   async findUserByUsername(userName: string) {

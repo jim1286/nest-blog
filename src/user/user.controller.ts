@@ -27,19 +27,17 @@ export class UserController {
   }
 
   @Post('/signup')
-  signUp(@Body(ValidationPipe) signUpDto: UserDto.SignUpDto) {
-    return this.userService.signUp(signUpDto);
+  @UseInterceptors(FileInterceptor('image'))
+  signUp(
+    @Body(ValidationPipe) signUpDto: UserDto.SignUpDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.userService.signUp(signUpDto, file);
   }
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
   getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
     return this.userService.getUser(user);
-  }
-
-  @Post('/')
-  @UseInterceptors(FileInterceptor('image'))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.userService.uploadFile(file);
   }
 }
