@@ -34,20 +34,20 @@ jobs:
           cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
           cache-to: type=gha,mode=max
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: ssh connect & production
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY}}
-          port: ${{ secrets.PORT }}
-          script: |
-            docker stop nest-container
-            docker rm nest-container
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog
-            docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog:latest
-            docker run -it --name "nest-container" -d -p 3000:3000 --env-file ./.env ${{ secrets.DOCKERHUB_USERNAME }}/nest-blog:latest
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: ssh connect & production
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USERNAME }}
+  #         key: ${{ secrets.PRIVATE_KEY}}
+  #         port: ${{ secrets.PORT }}
+  #         script: |
+  #           docker stop nest-container
+  #           docker rm nest-container
+  #           docker rmi ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog
+  #           docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog:latest
+  #           docker run -it --name "nest-container" -d -p 3000:3000 --env-file ./.env ${{ secrets.DOCKERHUB_USERNAME }}/nest-blog:latest
