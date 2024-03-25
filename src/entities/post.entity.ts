@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import {
   BookmarkEntity,
   CommentEntity,
@@ -29,15 +36,15 @@ export class PostEntity extends BaseEntity {
   @OneToMany(() => CommentEntity, (comment) => comment.post)
   comments: CommentEntity[];
 
-  @OneToOne(() => BookmarkEntity, (bookmark) => bookmark.post)
+  @OneToOne(() => BookmarkEntity)
+  @JoinColumn()
   bookmark: BookmarkEntity;
 
-  @OneToOne(() => PostFavoriteEntity, (postFavorite) => postFavorite.post)
+  @OneToOne(() => PostFavoriteEntity)
+  @JoinColumn()
   postFavorite: PostFavoriteEntity;
 
-  @OneToOne(
-    () => CommentFavoriteEntity,
-    (commentFavorite) => commentFavorite.post,
-  )
+  @OneToOne(() => CommentFavoriteEntity)
+  @JoinColumn()
   commentFavorite: CommentFavoriteEntity;
 }
