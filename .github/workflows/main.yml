@@ -30,7 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog:latest
           cache-from: type=gha # 여기서 gha 는 Guthub Actions 용 캐시를 의미합니다.
           cache-to: type=gha,mode=max
 
@@ -48,6 +48,6 @@ jobs:
           script: |
             docker stop nest-container
             docker rm nest-container
-            docker rmi ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study
-            docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/nest-study:latest
-            docker run -it --name "nest-container" -d -p 3000:3000 --env-file ./.env ${{ secrets.DOCKERHUB_USERNAME }}/nest-study:latest
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog
+            docker pull ${{ secrets.DOCKERHUB_USERNAME  }}/nest-blog:latest
+            docker run -it --name "nest-container" -d -p 3000:3000 --env-file ./.env ${{ secrets.DOCKERHUB_USERNAME }}/nest-blog:latest
