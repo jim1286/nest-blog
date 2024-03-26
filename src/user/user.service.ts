@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { UserResponse } from '@/response';
 import { UserDto } from '@/dto';
-import { TokenPayload } from '@/interface';
+import { TokenPayload, User } from '@/interface';
 import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
 import { S3Service } from '@/s3/s3.service';
@@ -61,20 +61,19 @@ export class UserService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const createUser = {
+    const newUser: User = {
       id: this.utilStrategy.getUUID(),
       userName: userName,
       password: hashedPassword,
       role: RoleEnum.USER,
-      thumbnailUrl: null,
     };
 
     if (file) {
       const thumbnailUrl = await this.s3Service.uploadImage(file);
-      createUser.thumbnailUrl = thumbnailUrl.imageUrl;
+      newUser.thumbnailUrl = thumbnailUrl.imageUrl;
     }
 
-    await this.userRepository.save(createUser);
+    await this.userRepository.saveUser(newUser);
 
     return '생성완료';
   }
