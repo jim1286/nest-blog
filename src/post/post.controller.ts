@@ -21,11 +21,11 @@ export class PostController {
     @Body(ValidationPipe) body: PostDto.CreateDto,
     @GetUser('userName') userName: string,
   ) {
-    await this.postService.createPost(body, userName);
+    return await this.postService.createPost(body, userName);
   }
 
   @Get('/')
   async getPostListByUserId(@GetUser('id') userId: string) {
-    await this.postService.getPostListByUserId(userId);
+    return await this.postService.getPostListByUserId(userId);
   }
 }
