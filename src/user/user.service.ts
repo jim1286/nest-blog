@@ -43,11 +43,9 @@ export class UserService {
 
     const accessToken = await this.tokenStrategy.getAccessToken(payload);
     const refreshToken = await this.tokenStrategy.getRefreshToken(payload);
+    const res: UserResponse.SignIn = { accessToken, refreshToken };
 
-    return {
-      accessToken,
-      refreshToken,
-    };
+    return res;
   }
 
   async signUp(body: UserDto.SignUpDto, file?: Express.Multer.File) {
