@@ -22,7 +22,7 @@ export class UserService {
 
   async signIn(body: UserDto.SignInDto): Promise<UserResponse.SignIn> {
     const { userName, password } = body;
-    const user = await this.userRepository.findUserByUsername(userName);
+    const user = await this.userRepository.getUserByUsername(userName);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
@@ -46,9 +46,9 @@ export class UserService {
     return res;
   }
 
-  async signUp(body: UserDto.SignUpDto, file?: Express.Multer.File) {
+  async createUser(body: UserDto.SignUpDto, file?: Express.Multer.File) {
     const { userName, password } = body;
-    const user = await this.userRepository.findUserByUsername(userName);
+    const user = await this.userRepository.getUserByUsername(userName);
 
     if (user) {
       throw new BadRequestException('동일한 유저 아이디가 존재합니다.');
@@ -76,7 +76,7 @@ export class UserService {
 
   async getUser(body: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
     const { id } = body;
-    const user = await this.userRepository.findUserById(id);
+    const user = await this.userRepository.getUserById(id);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');

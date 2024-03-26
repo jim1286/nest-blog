@@ -29,26 +29,24 @@ export class PostController {
   }
 
   @Get('/')
-  async getPostListByUserId(
-    @GetUser('id') userId: string,
-  ): Promise<PostEntity[]> {
-    return await this.postService.getPostListByUserId(userId);
+  async getPostList(@GetUser('id') userId: string): Promise<PostEntity[]> {
+    return await this.postService.getPostList(userId);
   }
 
   @Delete('/:postId')
-  async deletePostByPostId(
+  async deletePost(
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
   ) {
-    return await this.postService.deletePostByPostId(postId, userId);
+    return await this.postService.deletePost(postId, userId);
   }
 
   @Put('/:postId')
-  async updatePostByPostId(
+  async updatePost(
     @Body(ValidationPipe) body: PostDto.UpdatePostDto,
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
   ) {
-    return await this.postService.updatePostByPostId(body, postId, userId);
+    return await this.postService.updatePost(body, postId, userId);
   }
 }

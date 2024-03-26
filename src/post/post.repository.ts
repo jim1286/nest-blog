@@ -9,41 +9,28 @@ export class PostRepository extends Repository<PostEntity> {
     super(PostEntity, dataSource.createEntityManager());
   }
 
-  async getPostListByUserId(userId: string) {
+  async getPostById(id: string) {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 
-    return await queryBuilder
-      .leftJoinAndSelect('post.user', 'user')
-      .where('user.id = :id', { id: userId })
-      .getMany();
+    return await queryBuilder.where('post.id = :id', { id }).getOne();
   }
 
-  async getPostByPostId(postId: string) {
+  async deletePostById(id: string) {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 
-    return await queryBuilder.where('post.id = :id', { id: postId }).getOne();
+    await queryBuilder.softDelete().where('post.id = :id', { id }).execute();
   }
 
-  async deletePostByPostId(postId: string) {
-    const queryBuilder: SelectQueryBuilder<PostEntity> =
-      this.createQueryBuilder('post');
-
-    await queryBuilder
-      .softDelete()
-      .where('post.id = :id', { id: postId })
-      .execute();
-  }
-
-  async updatePostByPostId(body: PostDto.UpdatePostDto, postId: string) {
+  async updatePostById(body: PostDto.UpdatePostDto, id: string) {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 
     await queryBuilder
       .update(PostEntity)
       .set(body)
-      .where('post.id = :id', { id: postId })
+      .where('post.id = :id', { id })
       .execute();
   }
 }

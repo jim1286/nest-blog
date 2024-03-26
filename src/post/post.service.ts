@@ -12,7 +12,7 @@ export class PostService {
   ) {}
 
   async createPost(body: PostDto.CreateDto, userName: string) {
-    const user = await this.userRepository.findUserByUsername(userName);
+    const user = await this.userRepository.getUserByUsername(userName);
     const newPost = {
       user: user,
       isDeleted: false,
@@ -24,37 +24,36 @@ export class PostService {
     return '생성 완료';
   }
 
-  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
-    const postList = (await this.userRepository.getPostListByUserId(userId))
-      .posts;
+  async getPostList(userId: string): Promise<PostEntity[]> {
+    const postList = (await this.userRepository.getPostListById(userId)).posts;
 
     return postList;
   }
 
-  async deletePostByPostId(postId: string, userId: string) {
-    const postList = await this.getPostListByUserId(userId);
+  async deletePost(postId: string, userId: string) {
+    const postList = await this.getPostList(userId);
 
     if (!postList.find((post) => post.id === postId)) {
       throw new BadRequestException('작성자만 글을 삭제할 수 있습니다.');
     }
 
-    await this.postRepository.deletePostByPostId(postId);
+    await this.postRepository.deletePostById(postId);
 
     return '삭제 완료';
   }
 
-  async updatePostByPostId(
+  async updatePost(
     body: PostDto.UpdatePostDto,
     postId: string,
     userId: string,
   ) {
-    const postList = await this.getPostListByUserId(userId);
+    const postList = await this.getPostList(userId);
 
     if (!postList.find((post) => post.id === postId)) {
       throw new BadRequestException('작성자만 글을 수정할 수 있습니다.');
     }
 
-    await this.postRepository.updatePostByPostId(body, postId);
+    await this.postRepository.updatePostById(body, postId);
 
     return '수정 완료';
   }

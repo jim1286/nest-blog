@@ -28,11 +28,11 @@ export class UserController {
 
   @Post('/signup')
   @UseInterceptors(FileInterceptor('image'))
-  signUp(
+  createUser(
     @Body(ValidationPipe) signUpDto: UserDto.SignUpDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    return this.userService.signUp(signUpDto, file);
+    return this.userService.createUser(signUpDto, file);
   }
 
   @Get('/')
