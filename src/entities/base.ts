@@ -4,12 +4,12 @@ import {
   DeleteDateColumn,
   Entity,
   UpdateDateColumn,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
 export class BaseEntity extends TypeOrmBaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @CreateDateColumn()

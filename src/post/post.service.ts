@@ -1,7 +1,6 @@
 import { PostDto } from '@/dto';
 import { PostRepository } from './post.repository';
 import { Injectable } from '@nestjs/common';
-import { UtilStrategy } from '@/strategy';
 import { UserRepository } from '@/user/user.repository';
 
 @Injectable()
@@ -9,17 +8,24 @@ export class PostService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
-    private readonly utilStrategy: UtilStrategy,
   ) {}
 
-  async create(body: PostDto.CreateDto, userId: string): Promise<any> {
-    const user = await this.userRepository.findUserById(userId);
+  async createPost(body: PostDto.CreateDto, userName: string) {
+    const user = await this.userRepository.findUserByUsername(userName);
     const newPost = {
-      id: this.utilStrategy.getUUID(),
       user: user,
+      isDeleted: false,
       ...body,
     };
 
     await this.postRepository.save(newPost);
+
+    return '생성완료';
+  }
+
+  async getPostListByUserId(userId: string): Promise<any> {
+    const postList = await this.postRepository.getPostListByUserId(userId);
+
+    return postList;
   }
 }

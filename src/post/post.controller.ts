@@ -2,6 +2,7 @@ import { JwtAuthGuard } from '@/guard';
 import {
   Body,
   Controller,
+  Get,
   Post,
   UseGuards,
   ValidationPipe,
@@ -18,8 +19,13 @@ export class PostController {
   @Post('/')
   async createPost(
     @Body(ValidationPipe) body: PostDto.CreateDto,
-    @GetUser('id') userId: string,
+    @GetUser('userName') userName: string,
   ) {
-    await this.postService.create(body, userId);
+    await this.postService.createPost(body, userName);
+  }
+
+  @Get('/')
+  async getPostListByUserId(@GetUser('id') userId: string) {
+    await this.postService.getPostListByUserId(userId);
   }
 }

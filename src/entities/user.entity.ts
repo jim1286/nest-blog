@@ -15,7 +15,7 @@ export class UserEntity extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @Column({ nullable: true })
@@ -23,6 +23,9 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   role: RoleEnum;
+
+  @Column()
+  isDeleted: boolean;
 
   @OneToMany(() => PostEntity, (post) => post.user)
   posts: PostEntity[];

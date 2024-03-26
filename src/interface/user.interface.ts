@@ -5,5 +5,6 @@ export interface User {
   userName: string;
   password: string;
   role: RoleEnum;
+  isDeleted: boolean;
   thumbnailUrl?: string;
 }

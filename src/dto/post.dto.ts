@@ -11,3 +11,8 @@ export class CreateDto {
   @IsString()
   content: string;
 }
+
+export class GetPostListDto {
+  @IsString()
+  userId: string;
+}

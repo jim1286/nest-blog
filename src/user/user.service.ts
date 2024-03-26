@@ -5,12 +5,11 @@ import {
 } from '@nestjs/common';
 import { UserResponse } from '@/response';
 import { UserDto } from '@/dto';
-import { TokenPayload, User } from '@/interface';
+import { TokenPayload } from '@/interface';
 import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
 import { S3Service } from '@/s3/s3.service';
 import { RoleEnum } from '@/enum';
-import { UtilStrategy } from '@/strategy';
 import { UserRepository } from './user.repository';
 
 @Injectable()
@@ -18,7 +17,6 @@ export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly tokenStrategy: TokenStrategy,
-    private readonly utilStrategy: UtilStrategy,
     private readonly s3Service: S3Service,
   ) {}
 
@@ -59,10 +57,10 @@ export class UserService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser: User = {
-      id: this.utilStrategy.getUUID(),
+    const newUser: any = {
       userName: userName,
       password: hashedPassword,
+      isDeleted: false,
       role: RoleEnum.USER,
     };
 

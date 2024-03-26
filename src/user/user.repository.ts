@@ -21,6 +21,7 @@ export class UserRepository extends Repository<UserEntity> {
 
     return await queryBuilder
       .where('user.userName = :userName', { userName })
+      .addSelect('user.password')
       .getOne();
   }
 }

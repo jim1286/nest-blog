@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@/entities';
-import { TokenStrategy, UtilStrategy } from '@/strategy';
+import { TokenStrategy } from '@/strategy';
 import { S3Module } from '@/s3/s3.module';
 import { UserRepository } from './user.repository';
 
@@ -24,7 +24,7 @@ import { UserRepository } from './user.repository';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, TokenStrategy, UtilStrategy],
+  providers: [UserService, UserRepository, TokenStrategy],
   exports: [UserRepository],
 })
 export class UserModule {}

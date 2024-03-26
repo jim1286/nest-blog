@@ -7,6 +7,9 @@ export class CommentEntity extends BaseEntity {
   @Column()
   content: string;
 
+  @Column()
+  isDeleted: boolean;
+
   @ManyToOne(() => UserEntity, (user) => user.comments)
   user: UserEntity;
 
