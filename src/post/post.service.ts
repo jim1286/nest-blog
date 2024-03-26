@@ -1,7 +1,8 @@
 import { PostDto } from '@/dto';
 import { PostRepository } from './post.repository';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
+import { PostEntity } from '@/entities';
 
 @Injectable()
 export class PostService {
@@ -20,12 +21,41 @@ export class PostService {
 
     await this.postRepository.save(newPost);
 
-    return '생성완료';
+    return '생성 완료';
   }
 
-  async getPostListByUserId(userId: string): Promise<any> {
-    const postList = await this.postRepository.getPostListByUserId(userId);
+  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
+    const postList = (await this.userRepository.getPostListByUserId(userId))
+      .posts;
 
     return postList;
+  }
+
+  async deletePostByPostId(postId: string, userId: string) {
+    const postList = await this.getPostListByUserId(userId);
+
+    if (!postList.find((post) => post.id === postId)) {
+      throw new BadRequestException('작성자만 글을 삭제할 수 있습니다.');
+    }
+
+    await this.postRepository.deletePostByPostId(postId);
+
+    return '삭제 완료';
+  }
+
+  async updatePostByPostId(
+    body: PostDto.UpdatePostDto,
+    postId: string,
+    userId: string,
+  ) {
+    const postList = await this.getPostListByUserId(userId);
+
+    if (!postList.find((post) => post.id === postId)) {
+      throw new BadRequestException('작성자만 글을 수정할 수 있습니다.');
+    }
+
+    await this.postRepository.updatePostByPostId(body, postId);
+
+    return '수정 완료';
   }
 }

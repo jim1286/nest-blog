@@ -27,9 +27,6 @@ export class PostEntity extends BaseEntity {
   @Column()
   content: string;
 
-  @Column()
-  isDeleted: boolean;
-
   @ManyToOne(() => UserEntity, (user) => user.posts)
   user: UserEntity;
 

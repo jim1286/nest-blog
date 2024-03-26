@@ -71,7 +71,7 @@ export class UserService {
 
     await this.userRepository.save(newUser);
 
-    return '생성완료';
+    return '생성 완료';
   }
 
   async getUser(body: UserDto.GetUserDto): Promise<UserResponse.GetUser> {

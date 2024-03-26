@@ -2,14 +2,18 @@ import { JwtAuthGuard } from '@/guard';
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
+  Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostDto } from '@/dto';
 import { GetUser } from '@/decorator';
+import { PostEntity } from '@/entities';
 
 @Controller('post')
 @UseGuards(JwtAuthGuard)
@@ -25,7 +29,26 @@ export class PostController {
   }
 
   @Get('/')
-  async getPostListByUserId(@GetUser('id') userId: string) {
+  async getPostListByUserId(
+    @GetUser('id') userId: string,
+  ): Promise<PostEntity[]> {
     return await this.postService.getPostListByUserId(userId);
+  }
+
+  @Delete('/:postId')
+  async deletePostByPostId(
+    @Param('postId') postId: string,
+    @GetUser('id') userId: string,
+  ) {
+    return await this.postService.deletePostByPostId(postId, userId);
+  }
+
+  @Put('/:postId')
+  async updatePostByPostId(
+    @Body(ValidationPipe) body: PostDto.UpdatePostDto,
+    @Param('postId') postId: string,
+    @GetUser('id') userId: string,
+  ) {
+    return await this.postService.updatePostByPostId(body, postId, userId);
   }
 }

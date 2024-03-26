@@ -16,3 +16,15 @@ export class GetPostListDto {
   @IsString()
   userId: string;
 }
+
+export class UpdatePostDto {
+  @IsString()
+  title: string;
+
+  @IsString()
+  @IsOptional()
+  subTitle: string;
+
+  @IsString()
+  content: string;
+}

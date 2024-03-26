@@ -24,9 +24,6 @@ export class UserEntity extends BaseEntity {
   @Column()
   role: RoleEnum;
 
-  @Column()
-  isDeleted: boolean;
-
   @OneToMany(() => PostEntity, (post) => post.user)
   posts: PostEntity[];
 
