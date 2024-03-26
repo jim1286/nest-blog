@@ -4,9 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfigService } from './config';
 import { UserModule } from './user/user.module';
 import { S3Module } from './s3/s3.module';
-import { PostService } from './post/post.service';
-import { PostController } from './post/post.controller';
 import { PostModule } from './post/post.module';
+import { JwtModule } from './jwt/jwt.module';
 
 @Module({
   imports: [
@@ -21,8 +20,9 @@ import { PostModule } from './post/post.module';
     UserModule,
     S3Module,
     PostModule,
+    JwtModule,
   ],
-  providers: [PostService],
-  controllers: [PostController],
+  providers: [],
+  controllers: [],
 })
 export class AppModule {}

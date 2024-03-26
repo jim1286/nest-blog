@@ -7,10 +7,12 @@ import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@/entities';
 import { TokenStrategy, UtilStrategy } from '@/strategy';
 import { S3Module } from '@/s3/s3.module';
+import { UserRepository } from './user.repository';
 
 @Module({
   imports: [
     S3Module,
+    JwtModule,
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
@@ -23,7 +25,7 @@ import { S3Module } from '@/s3/s3.module';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, TokenStrategy, UtilStrategy],
-  exports: [UserService],
+  providers: [UserService, UserRepository, TokenStrategy, UtilStrategy],
+  exports: [UserRepository],
 })
 export class UserModule {}

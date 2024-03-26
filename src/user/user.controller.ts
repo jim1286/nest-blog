@@ -30,7 +30,7 @@ export class UserController {
   @UseInterceptors(FileInterceptor('image'))
   signUp(
     @Body(ValidationPipe) signUpDto: UserDto.SignUpDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() file?: Express.Multer.File,
   ) {
     return this.userService.signUp(signUpDto, file);
   }
