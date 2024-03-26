@@ -24,14 +24,20 @@ export class PostService {
     return '생성 완료';
   }
 
-  async getPostList(userId: string): Promise<PostEntity[]> {
+  async getAllPostList(): Promise<PostEntity[]> {
+    const postList = await this.postRepository.getAllPostList();
+
+    return postList;
+  }
+
+  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
     const postList = (await this.userRepository.getPostListById(userId)).posts;
 
     return postList;
   }
 
-  async deletePost(postId: string, userId: string) {
-    const postList = await this.getPostList(userId);
+  async deletePostByPostId(postId: string, userId: string) {
+    const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
       throw new BadRequestException('작성자만 글을 삭제할 수 있습니다.');
@@ -42,12 +48,12 @@ export class PostService {
     return '삭제 완료';
   }
 
-  async updatePost(
+  async updatePostByPostId(
     body: PostDto.UpdatePostDto,
     postId: string,
     userId: string,
   ) {
-    const postList = await this.getPostList(userId);
+    const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
       throw new BadRequestException('작성자만 글을 수정할 수 있습니다.');

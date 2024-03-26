@@ -9,6 +9,13 @@ export class PostRepository extends Repository<PostEntity> {
     super(PostEntity, dataSource.createEntityManager());
   }
 
+  async getAllPostList() {
+    const queryBuilder: SelectQueryBuilder<PostEntity> =
+      this.createQueryBuilder('post');
+
+    return await queryBuilder.getMany();
+  }
+
   async getPostById(id: string) {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
