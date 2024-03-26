@@ -5,7 +5,7 @@ import { TypeOrmConfigService } from './config';
 import { UserModule } from './user/user.module';
 import { S3Module } from './s3/s3.module';
 import { PostModule } from './post/post.module';
-import { JwtModule } from './jwt/jwt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { JwtModule } from './jwt/jwt.module';
     UserModule,
     S3Module,
     PostModule,
-    JwtModule,
+    AuthModule,
   ],
   providers: [],
   controllers: [],

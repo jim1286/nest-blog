@@ -12,7 +12,6 @@ import { UserRepository } from './user.repository';
 @Module({
   imports: [
     S3Module,
-    JwtModule,
     TypeOrmModule.forFeature([UserEntity]),
     JwtModule.registerAsync({
       inject: [ConfigService],
