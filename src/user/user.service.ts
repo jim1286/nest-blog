@@ -71,14 +71,14 @@ export class UserService {
       newUser.thumbnailUrl = thumbnailUrl.imageUrl;
     }
 
-    await this.userRepository.saveUser(newUser);
+    await this.userRepository.save(newUser);
 
     return '생성완료';
   }
 
   async getUser(body: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
-    const { userName } = body;
-    const user = await this.userRepository.findUserByUsername(userName);
+    const { id } = body;
+    const user = await this.userRepository.findUserById(id);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
