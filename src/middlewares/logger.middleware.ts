@@ -4,7 +4,7 @@ import * as moment from 'moment-timezone';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private logger = new Logger();
+  constructor(private readonly logger: Logger) {}
 
   use(req: Request, res: Response, next: NextFunction) {
     // 요청 객체로부터 ip, http method, url, user agent를 받아온 후

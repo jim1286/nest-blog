@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfig } from './config';
@@ -23,7 +23,7 @@ import { LoggerMiddleware } from './middlewares';
     PostModule,
     AuthModule,
   ],
-  providers: [],
+  providers: [Logger],
   controllers: [],
 })
 export class AppModule implements NestModule {
