@@ -40,7 +40,9 @@
     "class-validator": "^0.14.1",
     "cross-env": "^7.0.3",
     "install": "^0.13.0",
+    "moment-timezone": "^0.5.45",
     "mysql2": "^3.9.2",
+    "nest-winston": "^1.9.4",
     "npm": "^10.5.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -48,7 +50,9 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

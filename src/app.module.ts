@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmConfigService } from './config';
+import { TypeOrmConfig } from './config';
 import { UserModule } from './user/user.module';
 import { S3Module } from './s3/s3.module';
 import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
+import { LoggerMiddleware } from './middlewares';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigModule],
-      useClass: TypeOrmConfigService,
+      useClass: TypeOrmConfig,
     }),
     UserModule,
     S3Module,
@@ -25,4 +26,8 @@ import { AuthModule } from './auth/auth.module';
   providers: [],
   controllers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

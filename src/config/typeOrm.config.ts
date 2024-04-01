@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 
 @Injectable()
-export class TypeOrmConfigService implements TypeOrmOptionsFactory {
+export class TypeOrmConfig implements TypeOrmOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {

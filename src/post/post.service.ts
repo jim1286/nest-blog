@@ -1,12 +1,13 @@
 import { PostDto } from '@/dto';
 import { PostRepository } from './post.repository';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { PostEntity } from '@/entities';
 
 @Injectable()
 export class PostService {
   constructor(
+    private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
   ) {}
@@ -40,6 +41,7 @@ export class PostService {
     const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
+      this.logger.warn('작성자만 글을 수정할 수 있습니다.');
       throw new BadRequestException('작성자만 글을 삭제할 수 있습니다.');
     }
 
@@ -56,6 +58,7 @@ export class PostService {
     const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
+      this.logger.warn('작성자만 글을 수정할 수 있습니다.');
       throw new BadRequestException('작성자만 글을 수정할 수 있습니다.');
     }
 

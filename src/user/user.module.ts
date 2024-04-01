@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -24,7 +24,7 @@ import { UserRepository } from './user.repository';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService, UserRepository, TokenStrategy],
+  providers: [UserService, UserRepository, TokenStrategy, Logger],
   exports: [UserRepository],
 })
 export class UserModule {}

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { UserResponse } from '@/response';
@@ -15,6 +16,7 @@ import { UserRepository } from './user.repository';
 @Injectable()
 export class UserService {
   constructor(
+    private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly tokenStrategy: TokenStrategy,
     private readonly s3Service: S3Service,
@@ -25,12 +27,14 @@ export class UserService {
     const user = await this.userRepository.getUserByUsername(userName);
 
     if (!user) {
+      this.logger.warn('유저가 존재하지 않습니다.');
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
+      this.logger.warn('비밀번호가 맞지 않습니다.');
       throw new BadRequestException('비밀번호가 맞지 않습니다.');
     }
 
@@ -51,6 +55,7 @@ export class UserService {
     const user = await this.userRepository.getUserByUsername(userName);
 
     if (user) {
+      this.logger.warn('동일한 유저 아이디가 존재합니다.');
       throw new BadRequestException('동일한 유저 아이디가 존재합니다.');
     }
 
@@ -79,6 +84,7 @@ export class UserService {
     const user = await this.userRepository.getUserById(id);
 
     if (!user) {
+      this.logger.warn('유저가 존재하지 않습니다.');
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 

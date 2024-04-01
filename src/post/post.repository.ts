@@ -13,7 +13,7 @@ export class PostRepository extends Repository<PostEntity> {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 
-    return await queryBuilder.getMany();
+    return await queryBuilder.orderBy('post.createdAt', 'DESC').getMany();
   }
 
   async getPostById(id: string) {
