@@ -8,6 +8,7 @@ import {
   PostFavoriteEntity,
 } from '.';
 import { BaseEntity } from './base';
+import { Exclude } from 'class-transformer';
 
 @Entity('User')
 @Unique(['userName'])
@@ -15,7 +16,8 @@ export class UserEntity extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column({ select: false })
+  @Column()
+  @Exclude()
   password: string;
 
   @Column({ nullable: true })

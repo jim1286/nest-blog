@@ -1,5 +1,5 @@
 import { TokenPayload } from '@/interface';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
 import * as dotenv from 'dotenv';
@@ -25,8 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     const user = await this.userRepository.getUserByUsername(userName);
 
     if (!user) {
-      this.logger.warn('유저가 존재하지 않습니다.');
-      throw new BadRequestException('유저가 존재하지 않습니다.');
+      throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
     return done(null, user);

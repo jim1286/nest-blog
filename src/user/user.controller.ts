@@ -10,8 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '@/decorator';
-import { UserDto } from '@/dto';
-import { UserResponse } from '@/response';
+import { UserResponse, UserValidate } from '@/dto';
 import { JwtAuthGuard } from '@/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 
@@ -21,7 +20,7 @@ export class UserController {
 
   @Post('/signin')
   signIn(
-    @Body(ValidationPipe) signInDto: UserDto.SignInDto,
+    @Body(ValidationPipe) signInDto: UserValidate.SignIn,
   ): Promise<UserResponse.SignIn> {
     return this.userService.signIn(signInDto);
   }
@@ -29,7 +28,7 @@ export class UserController {
   @Post('/signup')
   @UseInterceptors(FileInterceptor('image'))
   createUser(
-    @Body(ValidationPipe) signUpDto: UserDto.SignUpDto,
+    @Body(ValidationPipe) signUpDto: UserValidate.SignUp,
     @UploadedFile() file?: Express.Multer.File,
   ) {
     return this.userService.createUser(signUpDto, file);
@@ -37,7 +36,7 @@ export class UserController {
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  getUser(@GetUser() user: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
-    return this.userService.getUser(user);
+  getUser(@GetUser('id') userId: string): Promise<UserResponse.GetUser> {
+    return this.userService.getUser(userId);
   }
 }

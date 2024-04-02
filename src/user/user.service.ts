@@ -1,11 +1,11 @@
 import {
-  BadRequestException,
   Injectable,
   Logger,
+  NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { UserResponse } from '@/response';
-import { UserDto } from '@/dto';
+import { UserValidate, UserResponse } from '@/dto';
 import { TokenPayload } from '@/interface';
 import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
@@ -22,20 +22,18 @@ export class UserService {
     private readonly s3Service: S3Service,
   ) {}
 
-  async signIn(body: UserDto.SignInDto): Promise<UserResponse.SignIn> {
+  async signIn(body: UserValidate.SignIn): Promise<UserResponse.SignIn> {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
     if (!user) {
-      this.logger.warn('유저가 존재하지 않습니다.');
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      this.logger.warn('비밀번호가 맞지 않습니다.');
-      throw new BadRequestException('비밀번호가 맞지 않습니다.');
+      throw new UnauthorizedException('비밀번호가 맞지 않습니다.');
     }
 
     const payload: TokenPayload = {
@@ -50,13 +48,12 @@ export class UserService {
     return res;
   }
 
-  async createUser(body: UserDto.SignUpDto, file?: Express.Multer.File) {
+  async createUser(body: UserValidate.SignUp, file?: Express.Multer.File) {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
     if (user) {
-      this.logger.warn('동일한 유저 아이디가 존재합니다.');
-      throw new BadRequestException('동일한 유저 아이디가 존재합니다.');
+      throw new NotAcceptableException('동일한 유저 아이디가 존재합니다.');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -79,12 +76,10 @@ export class UserService {
     return '생성 완료';
   }
 
-  async getUser(body: UserDto.GetUserDto): Promise<UserResponse.GetUser> {
-    const { id } = body;
-    const user = await this.userRepository.getUserById(id);
+  async getUser(userId: string): Promise<UserResponse.GetUser> {
+    const user = await this.userRepository.getUserById(userId);
 
     if (!user) {
-      this.logger.warn('유저가 존재하지 않습니다.');
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 

@@ -1,6 +1,6 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class CreateDto {
+export class CreatePost {
   @IsString()
   title: string;
 
@@ -12,12 +12,12 @@ export class CreateDto {
   content: string;
 }
 
-export class GetPostListDto {
+export class GetPostList {
   @IsString()
   userId: string;
 }
 
-export class UpdatePostDto {
+export class UpdatePost {
   @IsString()
   title: string;
 

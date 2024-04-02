@@ -1,6 +1,6 @@
-import { PostDto } from '@/dto';
+import { PostValidate } from '@/dto';
 import { PostRepository } from './post.repository';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { PostEntity } from '@/entities';
 
@@ -12,8 +12,8 @@ export class PostService {
     private readonly postRepository: PostRepository,
   ) {}
 
-  async createPost(body: PostDto.CreateDto, userName: string) {
-    const user = await this.userRepository.getUserByUsername(userName);
+  async createPost(body: PostValidate.CreatePost, userId: string) {
+    const user = await this.userRepository.getUserById(userId);
     const newPost = {
       user: user,
       isDeleted: false,
@@ -23,6 +23,12 @@ export class PostService {
     await this.postRepository.save(newPost);
 
     return '생성 완료';
+  }
+
+  async getPostByPostId(postId: string): Promise<PostEntity> {
+    const post = await this.postRepository.getPostById(postId);
+
+    return post;
   }
 
   async getAllPostList(): Promise<PostEntity[]> {
@@ -41,8 +47,7 @@ export class PostService {
     const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
-      this.logger.warn('작성자만 글을 수정할 수 있습니다.');
-      throw new BadRequestException('작성자만 글을 삭제할 수 있습니다.');
+      throw new UnauthorizedException('작성자만 글을 삭제할 수 있습니다.');
     }
 
     await this.postRepository.deletePostById(postId);
@@ -51,15 +56,14 @@ export class PostService {
   }
 
   async updatePostByPostId(
-    body: PostDto.UpdatePostDto,
+    body: PostValidate.UpdatePost,
     postId: string,
     userId: string,
   ) {
     const postList = await this.getPostListByUserId(userId);
 
     if (!postList.find((post) => post.id === postId)) {
-      this.logger.warn('작성자만 글을 수정할 수 있습니다.');
-      throw new BadRequestException('작성자만 글을 수정할 수 있습니다.');
+      throw new UnauthorizedException('작성자만 글을 수정할 수 있습니다.');
     }
 
     await this.postRepository.updatePostById(body, postId);

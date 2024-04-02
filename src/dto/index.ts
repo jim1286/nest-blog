@@ -1,2 +1,2 @@
-export * as UserDto from './user.dto';
-export * as PostDto from './post.dto';
+export * from './validate';
+export * from './response';

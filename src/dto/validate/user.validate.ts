@@ -1,6 +1,6 @@
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-export class SignInDto {
+export class SignIn {
   @IsString()
   userName: string;
 
@@ -8,7 +8,7 @@ export class SignInDto {
   password: string;
 }
 
-export class SignUpDto {
+export class SignUp {
   @IsString()
   @MinLength(4)
   @MaxLength(20)
@@ -18,7 +18,7 @@ export class SignUpDto {
   password: string;
 }
 
-export class GetUserDto {
+export class GetUser {
   @IsString()
   id: string;
 
