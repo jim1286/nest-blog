@@ -1,6 +1,11 @@
 import { PostValidate } from '@/dto';
 import { PostRepository } from './post.repository';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { PostEntity } from '@/entities';
 
@@ -28,6 +33,10 @@ export class PostService {
   async getPostByPostId(postId: string): Promise<PostEntity> {
     const post = await this.postRepository.getPostById(postId);
 
+    if (!post) {
+      throw new NotFoundException('해당하는 글이 존재하지 않습니다.');
+    }
+
     return post;
   }
 
@@ -46,6 +55,10 @@ export class PostService {
   async deletePostByPostId(postId: string, userId: string) {
     const postList = await this.getPostListByUserId(userId);
 
+    if (postList.length === 0) {
+      throw new NotFoundException('유저가 쓴 글이 존재하지 않습니다.');
+    }
+
     if (!postList.find((post) => post.id === postId)) {
       throw new UnauthorizedException('작성자만 글을 삭제할 수 있습니다.');
     }
@@ -61,6 +74,10 @@ export class PostService {
     userId: string,
   ) {
     const postList = await this.getPostListByUserId(userId);
+
+    if (postList.length === 0) {
+      throw new NotFoundException('유저가 쓴 글이 존재하지 않습니다.');
+    }
 
     if (!postList.find((post) => post.id === postId)) {
       throw new UnauthorizedException('작성자만 글을 수정할 수 있습니다.');
