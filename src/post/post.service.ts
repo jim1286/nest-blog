@@ -2,7 +2,6 @@ import { PostValidate } from '@/dto';
 import { PostRepository } from './post.repository';
 import {
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -12,7 +11,6 @@ import { PostEntity } from '@/entities';
 @Injectable()
 export class PostService {
   constructor(
-    private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly postRepository: PostRepository,
   ) {}
