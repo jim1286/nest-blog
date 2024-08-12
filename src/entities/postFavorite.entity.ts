@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { PostEntity, UserEntity } from '.';
-import { BaseEntity } from './base';
+import { BaseEntity } from './base.entity';
 
 @Entity('PostFavorite')
 export class PostFavoriteEntity extends BaseEntity {

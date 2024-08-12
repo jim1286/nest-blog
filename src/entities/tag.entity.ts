@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { PostEntity } from '.';
-import { BaseEntity } from './base';
+import { BaseEntity } from './base.entity';
 
 @Entity('Tag')
 export class TagEntity extends BaseEntity {
@@ -9,4 +9,7 @@ export class TagEntity extends BaseEntity {
 
   @ManyToOne(() => PostEntity, (post) => post.tags)
   post: PostEntity;
+
+  @Column()
+  postId: string;
 }

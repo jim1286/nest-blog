@@ -7,7 +7,7 @@ import {
   PostEntity,
   PostFavoriteEntity,
 } from '.';
-import { BaseEntity } from './base';
+import { BaseEntity } from './base.entity';
 import { Exclude } from 'class-transformer';
 
 @Entity('User')
@@ -42,5 +42,5 @@ export class UserEntity extends BaseEntity {
     () => CommentFavoriteEntity,
     (commentFavorite) => commentFavorite.user,
   )
-  commentFavorite: CommentFavoriteEntity[];
+  commentFavorites: CommentFavoriteEntity[];
 }
