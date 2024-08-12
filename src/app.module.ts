@@ -7,6 +7,7 @@ import { S3Module } from './s3/s3.module';
 import { PostModule } from './post/post.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './middlewares';
+import { PostFavoriteModule } from './post-favorite/post-favorite.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LoggerMiddleware } from './middlewares';
     S3Module,
     PostModule,
     AuthModule,
+    PostFavoriteModule,
   ],
   providers: [Logger],
   controllers: [],

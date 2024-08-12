@@ -36,13 +36,11 @@ export class PostEntity extends BaseEntity {
   @OneToMany(() => CommentEntity, (comment) => comment.post)
   comments: CommentEntity[];
 
-  @OneToOne(() => BookmarkEntity)
-  @JoinColumn()
-  bookmark: BookmarkEntity;
+  @OneToMany(() => BookmarkEntity, (bookMark) => bookMark.post)
+  bookmarks: BookmarkEntity[];
 
-  @OneToOne(() => PostFavoriteEntity)
-  @JoinColumn()
-  postFavorite: PostFavoriteEntity;
+  @OneToMany(() => PostFavoriteEntity, (postFavorite) => postFavorite.post)
+  postFavorites: PostFavoriteEntity[];
 
   @OneToOne(() => CommentFavoriteEntity)
   @JoinColumn()
