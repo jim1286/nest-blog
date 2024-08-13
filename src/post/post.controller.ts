@@ -11,9 +11,9 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { PostValidate } from '@/dto';
 import { GetUser } from '@/decorator';
 import { PostEntity } from '@/entities';
+import { CreatePostRequestDto, UpdatePostRequestDto } from '@/http';
 
 @Controller('post')
 @UseGuards(JwtAuthGuard)
@@ -22,31 +22,29 @@ export class PostController {
 
   @Post('/')
   async createPost(
-    @Body(ValidationPipe) body: PostValidate.CreatePost,
+    @Body(ValidationPipe) body: CreatePostRequestDto,
     @GetUser('id') userId: string,
   ) {
     return await this.postService.createPost(body, userId);
   }
 
   @Get('/postList')
-  async getPostListByUserId(
-    @GetUser('id') userId: string,
-  ): Promise<PostEntity[]> {
+  async getPostList(@GetUser('id') userId: string): Promise<PostEntity[]> {
     return await this.postService.getPostListByUserId(userId);
   }
 
   @Get('/postList/all')
-  async getAllPostList(): Promise<PostEntity[]> {
-    return await this.postService.getAllPostList();
+  async getPostListAll(): Promise<PostEntity[]> {
+    return await this.postService.getPostListAll();
   }
 
   @Get('/:postId')
-  async getPostByPostId(@Param('postId') postId: string): Promise<PostEntity> {
+  async getPost(@Param('postId') postId: string): Promise<PostEntity> {
     return await this.postService.getPostByPostId(postId);
   }
 
   @Delete('/:postId')
-  async deletePostByPostId(
+  async deletePost(
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
   ) {
@@ -54,8 +52,8 @@ export class PostController {
   }
 
   @Put('/:postId')
-  async updatePostByPostId(
-    @Body(ValidationPipe) body: PostValidate.UpdatePost,
+  async updatePost(
+    @Body(ValidationPipe) body: UpdatePostRequestDto,
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
   ) {

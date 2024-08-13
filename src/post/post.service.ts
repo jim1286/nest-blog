@@ -1,4 +1,3 @@
-import { PostValidate } from '@/dto';
 import { PostRepository } from './post.repository';
 import {
   Injectable,
@@ -7,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '@/user/user.repository';
 import { PostEntity } from '@/entities';
+import { CreatePostRequestDto, UpdatePostRequestDto } from '@/http';
 
 @Injectable()
 export class PostService {
@@ -15,16 +15,15 @@ export class PostService {
     private readonly postRepository: PostRepository,
   ) {}
 
-  async createPost(body: PostValidate.CreatePost, userId: string) {
-    const user = await this.userRepository.getUserById(userId);
-    const newPost = {
-      user: user,
-      isDeleted: false,
+  async createPost(body: CreatePostRequestDto, userId: string) {
+    const user = await this.userRepository.getUserByUserId(userId);
+
+    const newPost = this.postRepository.create({
+      user,
       ...body,
-    };
+    });
 
     await this.postRepository.save(newPost);
-
     return '생성 완료';
   }
 
@@ -38,14 +37,15 @@ export class PostService {
     return post;
   }
 
-  async getAllPostList(): Promise<PostEntity[]> {
-    const postList = await this.postRepository.getAllPostList();
+  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
+    const postList = (await this.userRepository.getPostListByUserId(userId))
+      .posts;
 
     return postList;
   }
 
-  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
-    const postList = (await this.userRepository.getPostListById(userId)).posts;
+  async getPostListAll(): Promise<PostEntity[]> {
+    const postList = await this.postRepository.getAllPostList();
 
     return postList;
   }
@@ -67,7 +67,7 @@ export class PostService {
   }
 
   async updatePostByPostId(
-    body: PostValidate.UpdatePost,
+    body: UpdatePostRequestDto,
     postId: string,
     userId: string,
   ) {

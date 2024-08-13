@@ -22,7 +22,7 @@ export class PostFavoriteService {
       return '북마크 삭제 완료';
     }
 
-    const user = await this.userRepository.getUserById(userId);
+    const user = await this.userRepository.getUserByUserId(userId);
     const post = await this.postRepository.getPostById(postId);
 
     await this.postFavoriteRepository.save({ user, post, userId, postId });

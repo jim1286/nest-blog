@@ -10,33 +10,39 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GetUser } from '@/decorator';
-import { UserResponse, UserValidate } from '@/dto';
 import { JwtAuthGuard } from '@/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  GetUserResponse,
+  PostSignInRequestDto,
+  PostSignInResponse,
+  PostSignUpRequestDto,
+  PostSignUpResponse,
+} from '@/http';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/signin')
-  signIn(
-    @Body(ValidationPipe) signInDto: UserValidate.SignIn,
-  ): Promise<UserResponse.SignIn> {
-    return this.userService.signIn(signInDto);
+  postSignIn(
+    @Body(ValidationPipe) body: PostSignInRequestDto,
+  ): Promise<PostSignInResponse> {
+    return this.userService.signIn(body);
   }
 
   @Post('/signup')
   @UseInterceptors(FileInterceptor('image'))
-  createUser(
-    @Body(ValidationPipe) signUpDto: UserValidate.SignUp,
+  postSignUp(
+    @Body(ValidationPipe) body: PostSignUpRequestDto,
     @UploadedFile() file?: Express.Multer.File,
-  ) {
-    return this.userService.createUser(signUpDto, file);
+  ): Promise<PostSignUpResponse> {
+    return this.userService.createUser(body, file);
   }
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  getUser(@GetUser('id') userId: string): Promise<UserResponse.GetUser> {
+  getUser(@GetUser('id') userId: string): Promise<GetUserResponse> {
     return this.userService.getUser(userId);
   }
 }

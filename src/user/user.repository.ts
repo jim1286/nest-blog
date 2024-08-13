@@ -8,14 +8,14 @@ export class UserRepository extends Repository<UserEntity> {
     super(UserEntity, dataSource.createEntityManager());
   }
 
-  async getUserById(id: string): Promise<UserEntity> {
+  async getUserByUserId(id: string): Promise<UserEntity> {
     const queryBuilder: SelectQueryBuilder<UserEntity> =
       this.createQueryBuilder('user');
 
     return await queryBuilder.where('user.id = :id', { id }).getOne();
   }
 
-  async getPostListById(id: string) {
+  async getPostListByUserId(id: string) {
     const queryBuilder: SelectQueryBuilder<UserEntity> =
       this.createQueryBuilder('user');
 

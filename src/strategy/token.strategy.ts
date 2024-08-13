@@ -12,14 +12,14 @@ export class TokenStrategy {
 
   async getAccessToken(payload: TokenPayload): Promise<string> {
     return this.jwtService.sign(payload, {
-      secret: this.configService.get('SECRET'),
+      secret: this.configService.get('ACCESS_SECRET'),
       expiresIn: '10d',
     });
   }
 
   async getRefreshToken(payload: TokenPayload): Promise<string> {
     return this.jwtService.sign(payload, {
-      secret: this.configService.get('SECRET'),
+      secret: this.configService.get('REFRESH_SECRET'),
       expiresIn: '10d',
     });
   }

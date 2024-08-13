@@ -1,5 +1,5 @@
-import { PostValidate } from '@/dto';
 import { PostEntity } from '@/entities';
+import { UpdatePostRequestDto } from '@/http';
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
@@ -30,7 +30,7 @@ export class PostRepository extends Repository<PostEntity> {
     await queryBuilder.softDelete().where('post.id = :id', { id }).execute();
   }
 
-  async updatePostById(body: PostValidate.UpdatePost, id: string) {
+  async updatePostById(body: UpdatePostRequestDto, id: string) {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 

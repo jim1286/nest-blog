@@ -1,28 +1,26 @@
 import {
   Injectable,
-  Logger,
   NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserValidate, UserResponse } from '@/dto';
 import { TokenPayload } from '@/interface';
 import { TokenStrategy } from '@/strategy/token.strategy';
 import * as bcrypt from 'bcrypt';
 import { S3Service } from '@/s3/s3.service';
 import { RoleEnum } from '@/enum';
 import { UserRepository } from './user.repository';
+import { PostSignInRequestDto, PostSignUpRequestDto } from '@/http';
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly tokenStrategy: TokenStrategy,
     private readonly s3Service: S3Service,
   ) {}
 
-  async signIn(body: UserValidate.SignIn): Promise<UserResponse.SignIn> {
+  async signIn(body: PostSignInRequestDto) {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
@@ -43,12 +41,11 @@ export class UserService {
 
     const accessToken = await this.tokenStrategy.getAccessToken(payload);
     const refreshToken = await this.tokenStrategy.getRefreshToken(payload);
-    const res: UserResponse.SignIn = { accessToken, refreshToken };
 
-    return res;
+    return { accessToken, refreshToken };
   }
 
-  async createUser(body: UserValidate.SignUp, file?: Express.Multer.File) {
+  async createUser(body: PostSignUpRequestDto, file?: Express.Multer.File) {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
@@ -59,35 +56,35 @@ export class UserService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser: any = {
-      userName: userName,
+    const newUser = this.userRepository.create({
+      userName,
       password: hashedPassword,
-      isDeleted: false,
       role: RoleEnum.USER,
-    };
+    });
 
     if (file) {
-      const thumbnailUrl = await this.s3Service.uploadImage(file);
-      newUser.thumbnailUrl = thumbnailUrl.imageUrl;
+      try {
+        const thumbnailUrl = await this.s3Service.uploadImage(file);
+        newUser.thumbnailUrl = thumbnailUrl.imageUrl;
+      } catch (error) {
+        throw new Error('이미지 업로드 실패');
+      }
     }
-
     await this.userRepository.save(newUser);
 
-    return '생성 완료';
+    return { message: '생성 완료' };
   }
 
-  async getUser(userId: string): Promise<UserResponse.GetUser> {
-    const user = await this.userRepository.getUserById(userId);
+  async getUser(userId: string) {
+    const user = await this.userRepository.getUserByUserId(userId);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
-    const res: UserResponse.GetUser = {
+    return {
       id: user.id,
       userName: user.userName,
     };
-
-    return res;
   }
 }

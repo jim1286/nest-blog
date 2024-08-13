@@ -26,7 +26,6 @@ import { PostFavoriteModule } from './post-favorite/post-favorite.module';
     PostFavoriteModule,
   ],
   providers: [Logger],
-  controllers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
