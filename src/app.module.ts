@@ -8,6 +8,7 @@ import { PostModule } from './modules/post/post.module';
 import { LoggerMiddleware } from './middlewares';
 import { PostFavoriteModule } from './modules/post-favorite/post-favorite.module';
 import { CommentModule } from './modules/comment/comment.module';
+import { CommentFavoriteModule } from './modules/comment-favorite/comment-favorite.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CommentModule } from './modules/comment/comment.module';
     PostModule,
     PostFavoriteModule,
     CommentModule,
+    CommentFavoriteModule,
   ],
   providers: [Logger],
 })

@@ -76,6 +76,14 @@ export class CommentService {
     }
   }
 
+  async getCommentByCommentId(
+    commentId: string,
+  ): Promise<CommentEntityResponse> {
+    return await this.commentRepository.getCommentWithReplyByCommentId(
+      commentId,
+    );
+  }
+
   async getCommentListByPostId(
     postId: string,
   ): Promise<CommentEntityResponse[]> {

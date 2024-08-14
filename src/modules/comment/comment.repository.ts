@@ -19,6 +19,15 @@ export class CommentRepository extends Repository<CommentEntity> {
       .getMany();
   }
 
+  async getCommentWithReplyByCommentId(commentId: string) {
+    const queryBuilder: SelectQueryBuilder<CommentEntity> =
+      this.createQueryBuilder('comment');
+
+    return await queryBuilder
+      .where('comment.id = :commentId', { commentId })
+      .getOne();
+  }
+
   async getCommentWithReplyByCommentIdAndPostId(
     postId: string,
     commentId: string,
@@ -28,8 +37,8 @@ export class CommentRepository extends Repository<CommentEntity> {
 
     return await queryBuilder
       .leftJoinAndSelect('comment.children', 'children')
-      .where('comment.id = :commentId', { commentId })
-      .andWhere('comment.postId = :postId', { postId })
+      .where('comment.id = :postId', { postId })
+      .andWhere('comment.postId = :commentId', { commentId })
       .getOne();
   }
 
