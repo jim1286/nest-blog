@@ -7,6 +7,7 @@ import { S3Module } from './modules/s3/s3.module';
 import { PostModule } from './modules/post/post.module';
 import { LoggerMiddleware } from './middlewares';
 import { PostFavoriteModule } from './modules/post-favorite/post-favorite.module';
+import { CommentModule } from './modules/comment/comment.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { PostFavoriteModule } from './modules/post-favorite/post-favorite.module
     S3Module,
     PostModule,
     PostFavoriteModule,
+    CommentModule,
   ],
   providers: [Logger],
 })

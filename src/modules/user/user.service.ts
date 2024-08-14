@@ -79,9 +79,13 @@ export class UserService {
         throw new Error('이미지 업로드 실패');
       }
     }
-    await this.userRepository.save(newUser);
 
-    return { message: '생성 완료' };
+    try {
+      await this.userRepository.save(newUser);
+      return { message: '사용자 생성 완료' };
+    } catch (error) {
+      throw new Error('사용자 생성 실패');
+    }
   }
 
   async getUserByUserId(userId: string): Promise<UserEntityResponse> {

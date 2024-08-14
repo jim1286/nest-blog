@@ -1,6 +1,6 @@
 import { BaseResponse } from '../base.response';
 
-export interface BookmarkResponse extends BaseResponse {
+export interface BookmarkEntityResponse extends BaseResponse {
   userId: string;
   postId: string;
 }

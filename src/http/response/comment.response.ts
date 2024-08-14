@@ -1,12 +1,11 @@
-import { CommentFavoriteResponse } from './commentFavorite.response';
 import { BaseResponse } from '../base.response';
+import { CommentFavoriteEntityResponse } from './commentFavorite.response';
 
-export interface CommentResponse extends BaseResponse {
+export interface CommentEntityResponse extends BaseResponse {
   content: string;
-  isDeleted: boolean;
   userId: string;
   postId: string;
   parentId?: string;
-  children: CommentResponse[];
-  commentFavorites: CommentFavoriteResponse[];
+  children: CommentEntityResponse[];
+  commentFavorites: CommentFavoriteEntityResponse[];
 }

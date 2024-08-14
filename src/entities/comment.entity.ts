@@ -7,9 +7,6 @@ export class CommentEntity extends BaseEntity {
   @Column()
   content: string;
 
-  @Column()
-  isDeleted: boolean;
-
   @ManyToOne(() => UserEntity, (user) => user.comments)
   user: UserEntity;
 
@@ -25,7 +22,7 @@ export class CommentEntity extends BaseEntity {
   @ManyToOne(() => CommentEntity, (comment) => comment.children)
   parent: CommentEntity;
 
-  @Column()
+  @Column({ nullable: true })
   parentId: string;
 
   @OneToMany(() => CommentEntity, (comment) => comment.parent)

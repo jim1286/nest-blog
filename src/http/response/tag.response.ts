@@ -1,6 +1,6 @@
 import { BaseResponse } from '../base.response';
 
-export interface TagResponseDto extends BaseResponse {
+export interface TagEntityResponse extends BaseResponse {
   content: string;
   postId: string;
 }
