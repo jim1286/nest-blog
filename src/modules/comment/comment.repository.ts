@@ -8,6 +8,17 @@ export class CommentRepository extends Repository<CommentEntity> {
     super(CommentEntity, dataSource.createEntityManager());
   }
 
+  async getCommentListWithReplyByPostId(postId: string) {
+    const queryBuilder: SelectQueryBuilder<CommentEntity> =
+      this.createQueryBuilder('comment');
+
+    return await queryBuilder
+      .leftJoinAndSelect('comment.children', 'children')
+      .where('comment.postId = :postId', { postId })
+      .orderBy('comment.createdAt', 'DESC')
+      .getMany();
+  }
+
   async getCommentWithReplyByCommentIdAndPostId(
     postId: string,
     commentId: string,
@@ -20,17 +31,6 @@ export class CommentRepository extends Repository<CommentEntity> {
       .where('comment.id = :commentId', { commentId })
       .andWhere('comment.postId = :postId', { postId })
       .getOne();
-  }
-
-  async getCommentListWithReplyByPostId(postId: string) {
-    const queryBuilder: SelectQueryBuilder<CommentEntity> =
-      this.createQueryBuilder('comment');
-
-    return await queryBuilder
-      .leftJoinAndSelect('comment.children', 'children')
-      .where('comment.postId = :postId', { postId })
-      .orderBy('comment.createdAt', 'DESC')
-      .getMany();
   }
 
   async deleteCommentByCommentId(commentId: string) {
