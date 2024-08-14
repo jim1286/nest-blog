@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { WinstonLoggerConfig } from './config';
 import * as dotenv from 'dotenv';
 import { ClassSerializerInterceptor } from '@nestjs/common';
-import { HttpExceptionFilter } from './filter';
+import { HttpExceptionFilter } from './filters';
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 

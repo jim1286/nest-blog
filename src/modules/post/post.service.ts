@@ -4,7 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '@/user/user.repository';
+import { UserRepository } from '@/modules/user/user.repository';
 import { PostEntity } from '@/entities';
 import { CreatePostRequestDto, UpdatePostRequestDto } from '@/http';
 

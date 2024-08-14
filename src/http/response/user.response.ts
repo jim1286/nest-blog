@@ -1,5 +1,5 @@
 import { BaseResponse } from '../base.response';
-import { RoleEnum } from '@/enum';
+import { RoleEnum } from '@/enums';
 import { PostResponse } from './post.response';
 import { BookmarkResponse } from './bookmark.response';
 import { PostFavoriteResponse } from './postFavorite.response';

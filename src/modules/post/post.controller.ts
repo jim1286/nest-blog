@@ -1,4 +1,4 @@
-import { JwtAuthGuard } from '@/guard';
+import { JwtAuthGuard } from '@/guards';
 import {
   Body,
   Controller,
@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { GetUser } from '@/decorator';
+import { GetUser } from '@/decorators';
 import { PostEntity } from '@/entities';
 import { CreatePostRequestDto, UpdatePostRequestDto } from '@/http';
 

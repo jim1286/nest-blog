@@ -2,12 +2,11 @@ import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmConfig } from './config';
-import { UserModule } from './user/user.module';
-import { S3Module } from './s3/s3.module';
-import { PostModule } from './post/post.module';
-import { AuthModule } from './auth/auth.module';
+import { UserModule } from './modules/user/user.module';
+import { S3Module } from './modules/s3/s3.module';
+import { PostModule } from './modules/post/post.module';
 import { LoggerMiddleware } from './middlewares';
-import { PostFavoriteModule } from './post-favorite/post-favorite.module';
+import { PostFavoriteModule } from './modules/post-favorite/post-favorite.module';
 
 @Module({
   imports: [
@@ -22,7 +21,6 @@ import { PostFavoriteModule } from './post-favorite/post-favorite.module';
     UserModule,
     S3Module,
     PostModule,
-    AuthModule,
     PostFavoriteModule,
   ],
   providers: [Logger],

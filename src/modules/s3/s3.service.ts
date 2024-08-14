@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { UtilStrategy } from '@/strategy';
+import { UtilStrategy } from '@/strategies';
 
 @Injectable()
 export class S3Service {

@@ -4,20 +4,20 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { TokenPayload } from '@/interface';
-import { TokenStrategy } from '@/strategy/token.strategy';
+import { TokenPayload } from '@/interfaces';
 import * as bcrypt from 'bcrypt';
-import { S3Service } from '@/s3/s3.service';
-import { RoleEnum } from '@/enum';
+import { RoleEnum } from '@/enums';
 import { UserRepository } from './user.repository';
 import { PostSignInRequestDto, PostSignUpRequestDto } from '@/http';
+import { JwtStrategy } from '@/strategies';
+import { S3Service } from '../s3/s3.service';
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
-    private readonly tokenStrategy: TokenStrategy,
     private readonly s3Service: S3Service,
+    private readonly jwtStrategy: JwtStrategy,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async signIn(body: PostSignInRequestDto) {
@@ -39,8 +39,8 @@ export class UserService {
       userName: user.userName,
     };
 
-    const accessToken = await this.tokenStrategy.getAccessToken(payload);
-    const refreshToken = await this.tokenStrategy.getRefreshToken(payload);
+    const accessToken = await this.jwtStrategy.getAccessToken(payload);
+    const refreshToken = await this.jwtStrategy.getRefreshToken(payload);
 
     return { accessToken, refreshToken };
   }
@@ -75,7 +75,7 @@ export class UserService {
     return { message: '생성 완료' };
   }
 
-  async getUser(userId: string) {
+  async getUserByUserId(userId: string) {
     const user = await this.userRepository.getUserByUserId(userId);
 
     if (!user) {

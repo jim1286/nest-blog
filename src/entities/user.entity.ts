@@ -1,4 +1,4 @@
-import { RoleEnum } from '@/enum';
+import { RoleEnum } from '@/enums';
 import { Column, Entity, OneToMany, Unique } from 'typeorm';
 import {
   BookmarkEntity,

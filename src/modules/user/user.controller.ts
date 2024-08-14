@@ -9,8 +9,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetUser } from '@/decorator';
-import { JwtAuthGuard } from '@/guard';
+import { GetUser } from '@/decorators';
+import { JwtAuthGuard } from '@/guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   GetUserResponse,
@@ -43,6 +43,6 @@ export class UserController {
   @Get('/')
   @UseGuards(JwtAuthGuard)
   getUser(@GetUser('id') userId: string): Promise<GetUserResponse> {
-    return this.userService.getUser(userId);
+    return this.userService.getUserByUserId(userId);
   }
 }
