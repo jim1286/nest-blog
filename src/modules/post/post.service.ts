@@ -23,8 +23,12 @@ export class PostService {
       ...body,
     });
 
-    await this.postRepository.save(newPost);
-    return '생성 완료';
+    try {
+      await this.postRepository.save(newPost);
+      return { message: '생성 완료' };
+    } catch (error) {
+      throw new Error('생성 실패');
+    }
   }
 
   async getPostByPostId(postId: string): Promise<PostEntity> {
@@ -37,21 +41,8 @@ export class PostService {
     return post;
   }
 
-  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
-    const postList = (await this.userRepository.getPostListByUserId(userId))
-      .posts;
-
-    return postList;
-  }
-
-  async getPostListAll(): Promise<PostEntity[]> {
-    const postList = await this.postRepository.getAllPostList();
-
-    return postList;
-  }
-
   async deletePostByPostId(postId: string, userId: string) {
-    const postList = await this.getPostListByUserId(userId);
+    const postList = await this.postRepository.getPostListByUserId(userId);
 
     if (postList.length === 0) {
       throw new NotFoundException('유저가 쓴 글이 존재하지 않습니다.');
@@ -61,9 +52,12 @@ export class PostService {
       throw new UnauthorizedException('작성자만 글을 삭제할 수 있습니다.');
     }
 
-    await this.postRepository.deletePostById(postId);
-
-    return '삭제 완료';
+    try {
+      await this.postRepository.deletePostById(postId);
+      return { message: '삭제 완료' };
+    } catch (error) {
+      throw new Error('삭제 실패');
+    }
   }
 
   async updatePostByPostId(
@@ -71,7 +65,7 @@ export class PostService {
     postId: string,
     userId: string,
   ) {
-    const postList = await this.getPostListByUserId(userId);
+    const postList = await this.postRepository.getPostListByUserId(userId);
 
     if (postList.length === 0) {
       throw new NotFoundException('유저가 쓴 글이 존재하지 않습니다.');
@@ -81,8 +75,19 @@ export class PostService {
       throw new UnauthorizedException('작성자만 글을 수정할 수 있습니다.');
     }
 
-    await this.postRepository.updatePostById(body, postId);
+    try {
+      await this.postRepository.updatePostById(body, postId);
+      return { message: '수정 완료' };
+    } catch (error) {
+      throw new Error('수정 실패');
+    }
+  }
 
-    return '수정 완료';
+  async getPostListByUserId(userId: string): Promise<PostEntity[]> {
+    return await this.postRepository.getPostListByUserId(userId);
+  }
+
+  async getPostListAll(): Promise<PostEntity[]> {
+    return await this.postRepository.getPostListAll();
   }
 }

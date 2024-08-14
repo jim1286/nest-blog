@@ -25,7 +25,7 @@ export class PostFavoriteService {
     const user = await this.userRepository.getUserByUserId(userId);
     const post = await this.postRepository.getPostById(postId);
 
-    await this.postFavoriteRepository.save({ user, post, userId, postId });
+    await this.postFavoriteRepository.save({ user, post });
     return '북마크 생성 완료';
   }
 

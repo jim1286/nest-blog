@@ -5,7 +5,6 @@ import { BookmarkResponse } from './bookmark.response';
 import { PostFavoriteResponse } from './postFavorite.response';
 import { CommentResponse } from './comment.response';
 import { CommentFavoriteResponse } from './commentFavorite.response';
-import { BaseMessageResponse } from '../message.response';
 
 export interface UserResponse extends BaseResponse {
   userName: string;
@@ -22,8 +21,6 @@ export interface GetUserResponse {
   id: string;
   userName: string;
 }
-
-export interface PostSignUpResponse extends BaseMessageResponse {}
 
 export interface PostSignInResponse {
   accessToken: string;

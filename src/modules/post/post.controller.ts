@@ -13,7 +13,11 @@ import {
 import { PostService } from './post.service';
 import { GetUser } from '@/decorators';
 import { PostEntity } from '@/entities';
-import { CreatePostRequestDto, UpdatePostRequestDto } from '@/http';
+import {
+  CreatePostRequestDto,
+  MessageResponse,
+  UpdatePostRequestDto,
+} from '@/http';
 
 @Controller('post')
 @UseGuards(JwtAuthGuard)
@@ -24,7 +28,7 @@ export class PostController {
   async createPost(
     @Body(ValidationPipe) body: CreatePostRequestDto,
     @GetUser('id') userId: string,
-  ) {
+  ): Promise<MessageResponse> {
     return await this.postService.createPost(body, userId);
   }
 
@@ -47,7 +51,7 @@ export class PostController {
   async deletePost(
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
-  ) {
+  ): Promise<MessageResponse> {
     return await this.postService.deletePostByPostId(postId, userId);
   }
 
@@ -56,7 +60,7 @@ export class PostController {
     @Body(ValidationPipe) body: UpdatePostRequestDto,
     @Param('postId') postId: string,
     @GetUser('id') userId: string,
-  ) {
+  ): Promise<MessageResponse> {
     return await this.postService.updatePostByPostId(body, postId, userId);
   }
 }

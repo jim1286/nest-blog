@@ -17,7 +17,7 @@ import {
   PostSignInRequestDto,
   PostSignInResponse,
   PostSignUpRequestDto,
-  PostSignUpResponse,
+  MessageResponse,
 } from '@/http';
 
 @Controller('user')
@@ -36,7 +36,7 @@ export class UserController {
   postSignUp(
     @Body(ValidationPipe) body: PostSignUpRequestDto,
     @UploadedFile() file?: Express.Multer.File,
-  ): Promise<PostSignUpResponse> {
+  ): Promise<MessageResponse> {
     return this.userService.createUser(body, file);
   }
 

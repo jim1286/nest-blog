@@ -9,7 +9,7 @@ export class PostRepository extends Repository<PostEntity> {
     super(PostEntity, dataSource.createEntityManager());
   }
 
-  async getAllPostList() {
+  async getPostListAll() {
     const queryBuilder: SelectQueryBuilder<PostEntity> =
       this.createQueryBuilder('post');
 
@@ -28,6 +28,15 @@ export class PostRepository extends Repository<PostEntity> {
       this.createQueryBuilder('post');
 
     await queryBuilder.softDelete().where('post.id = :id', { id }).execute();
+  }
+
+  async getPostListByUserId(userId: string) {
+    const queryBuilder: SelectQueryBuilder<PostEntity> =
+      this.createQueryBuilder('post');
+
+    return await queryBuilder
+      .where('post.userId = :userId', { userId })
+      .getMany();
   }
 
   async updatePostById(body: UpdatePostRequestDto, id: string) {
