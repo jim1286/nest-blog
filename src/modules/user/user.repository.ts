@@ -15,16 +15,6 @@ export class UserRepository extends Repository<UserEntity> {
     return await queryBuilder.where('user.id = :id', { id }).getOne();
   }
 
-  async getPostListByUserId(id: string) {
-    const queryBuilder: SelectQueryBuilder<UserEntity> =
-      this.createQueryBuilder('user');
-
-    return await queryBuilder
-      .leftJoinAndSelect('user.posts', 'post')
-      .where('user.id = :id', { id })
-      .getOne();
-  }
-
   async getUserByUsername(userName: string): Promise<UserEntity> {
     const queryBuilder: SelectQueryBuilder<UserEntity> =
       this.createQueryBuilder('user');

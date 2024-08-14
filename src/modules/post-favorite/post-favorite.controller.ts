@@ -2,7 +2,7 @@ import { JwtAuthGuard } from '@/guards';
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostFavoriteService } from './post-favorite.service';
 import { GetUser } from '@/decorators';
-import { MessageResponse } from '@/http';
+import { MessageResponse, PostFavoriteEntityResponse } from '@/http';
 
 @Controller('post-favorite')
 @UseGuards(JwtAuthGuard)
@@ -21,12 +21,14 @@ export class PostFavoriteController {
   async getFavorite(
     @GetUser('id') userId: string,
     @Param('postId') postId: string,
-  ) {
+  ): Promise<PostFavoriteEntityResponse> {
     return await this.postFavoriteService.getFavorite(userId, postId);
   }
 
   @Get()
-  async getFavoriteList(@GetUser('id') userId: string) {
+  async getFavoriteList(
+    @GetUser('id') userId: string,
+  ): Promise<PostFavoriteEntityResponse[]> {
     return await this.postFavoriteService.getFavoriteList(userId);
   }
 }

@@ -13,7 +13,7 @@ import { GetUser } from '@/decorators';
 import { JwtAuthGuard } from '@/guards';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
-  GetUserResponse,
+  UserEntityResponse,
   PostSignInRequestDto,
   PostSignInResponse,
   PostSignUpRequestDto,
@@ -42,7 +42,7 @@ export class UserController {
 
   @Get('/')
   @UseGuards(JwtAuthGuard)
-  getUser(@GetUser('id') userId: string): Promise<GetUserResponse> {
+  getUser(@GetUser('id') userId: string): Promise<UserEntityResponse> {
     return this.userService.getUserByUserId(userId);
   }
 }

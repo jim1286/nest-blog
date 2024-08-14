@@ -8,7 +8,13 @@ import { TokenPayload } from '@/interfaces';
 import * as bcrypt from 'bcrypt';
 import { RoleEnum } from '@/enums';
 import { UserRepository } from './user.repository';
-import { PostSignInRequestDto, PostSignUpRequestDto } from '@/http';
+import {
+  MessageResponse,
+  PostSignInRequestDto,
+  PostSignInResponse,
+  PostSignUpRequestDto,
+  UserEntityResponse,
+} from '@/http';
 import { JwtStrategy } from '@/strategies';
 import { S3Service } from '../s3/s3.service';
 
@@ -20,7 +26,7 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async signIn(body: PostSignInRequestDto) {
+  async signIn(body: PostSignInRequestDto): Promise<PostSignInResponse> {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
@@ -45,7 +51,10 @@ export class UserService {
     return { accessToken, refreshToken };
   }
 
-  async createUser(body: PostSignUpRequestDto, file?: Express.Multer.File) {
+  async createUser(
+    body: PostSignUpRequestDto,
+    file?: Express.Multer.File,
+  ): Promise<MessageResponse> {
     const { userName, password } = body;
     const user = await this.userRepository.getUserByUsername(userName);
 
@@ -75,16 +84,13 @@ export class UserService {
     return { message: '생성 완료' };
   }
 
-  async getUserByUserId(userId: string) {
+  async getUserByUserId(userId: string): Promise<UserEntityResponse> {
     const user = await this.userRepository.getUserByUserId(userId);
 
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
 
-    return {
-      id: user.id,
-      userName: user.userName,
-    };
+    return user;
   }
 }

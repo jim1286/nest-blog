@@ -7,8 +7,8 @@ import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '@/entities';
 import { UserRepository } from './user.repository';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from '@/strategies';
 import { S3Module } from '../s3/s3.module';
+import { JwtStrategy } from '@/strategies';
 
 @Module({
   imports: [
@@ -27,6 +27,6 @@ import { S3Module } from '../s3/s3.module';
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository, JwtStrategy, Logger],
-  exports: [UserService, UserRepository],
+  exports: [UserService],
 })
 export class UserModule {}

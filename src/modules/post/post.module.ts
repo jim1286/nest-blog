@@ -7,6 +7,6 @@ import { UserRepository } from '@/modules/user/user.repository';
 @Module({
   controllers: [PostController],
   providers: [PostService, PostRepository, UserRepository, Logger],
-  exports: [PostRepository],
+  exports: [PostService],
 })
 export class PostModule {}

@@ -12,10 +12,10 @@ import {
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { GetUser } from '@/decorators';
-import { PostEntity } from '@/entities';
 import {
   CreatePostRequestDto,
   MessageResponse,
+  PostEntityResponse,
   UpdatePostRequestDto,
 } from '@/http';
 
@@ -33,17 +33,19 @@ export class PostController {
   }
 
   @Get('/postList')
-  async getPostList(@GetUser('id') userId: string): Promise<PostEntity[]> {
+  async getPostList(
+    @GetUser('id') userId: string,
+  ): Promise<PostEntityResponse[]> {
     return await this.postService.getPostListByUserId(userId);
   }
 
   @Get('/postList/all')
-  async getPostListAll(): Promise<PostEntity[]> {
+  async getPostListAll(): Promise<PostEntityResponse[]> {
     return await this.postService.getPostListAll();
   }
 
   @Get('/:postId')
-  async getPost(@Param('postId') postId: string): Promise<PostEntity> {
+  async getPost(@Param('postId') postId: string): Promise<PostEntityResponse> {
     return await this.postService.getPostByPostId(postId);
   }
 
