@@ -2,6 +2,7 @@ import { JwtAuthGuard } from '@/guards';
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { PostFavoriteService } from './post-favorite.service';
 import { GetUser } from '@/decorators';
+import { MessageResponse } from '@/http';
 
 @Controller('post-favorite')
 @UseGuards(JwtAuthGuard)
@@ -12,7 +13,7 @@ export class PostFavoriteController {
   async updateFavorite(
     @GetUser('id') userId: string,
     @Param('postId') postId: string,
-  ) {
+  ): Promise<MessageResponse> {
     return await this.postFavoriteService.updateFavorite(userId, postId);
   }
 

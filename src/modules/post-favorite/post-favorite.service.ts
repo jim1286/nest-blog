@@ -19,22 +19,20 @@ export class PostFavoriteService {
 
     if (favorite) {
       await this.postFavoriteRepository.deleteById(favorite.id);
-      return '북마크 삭제 완료';
+      return { message: '북마크 삭제 완료' };
     }
 
     const user = await this.userRepository.getUserByUserId(userId);
     const post = await this.postRepository.getPostById(postId);
 
     await this.postFavoriteRepository.save({ user, post });
-    return '북마크 생성 완료';
+    return { message: '북마크 생성 완료' };
   }
 
   async getFavorite(userId: string, postId: string) {
-    return (
-      (await this.postFavoriteRepository.getByUserIdAndPostId(
-        userId,
-        postId,
-      )) || '북마크 없음'
+    return await this.postFavoriteRepository.getByUserIdAndPostId(
+      userId,
+      postId,
     );
   }
 
