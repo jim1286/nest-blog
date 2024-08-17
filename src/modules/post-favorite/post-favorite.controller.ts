@@ -22,13 +22,16 @@ export class PostFavoriteController {
     @GetUser('id') userId: string,
     @Param('postId') postId: string,
   ): Promise<PostFavoriteEntityResponse> {
-    return await this.postFavoriteService.getFavorite(userId, postId);
+    return await this.postFavoriteService.getFavoriteByUserIdAndPostId(
+      userId,
+      postId,
+    );
   }
 
   @Get()
   async getFavoriteList(
     @GetUser('id') userId: string,
   ): Promise<PostFavoriteEntityResponse[]> {
-    return await this.postFavoriteService.getFavoriteList(userId);
+    return await this.postFavoriteService.getFavoriteListByUserId(userId);
   }
 }

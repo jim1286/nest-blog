@@ -41,7 +41,7 @@ export class PostFavoriteService {
     }
   }
 
-  async getFavorite(
+  async getFavoriteByUserIdAndPostId(
     userId: string,
     postId: string,
   ): Promise<PostFavoriteEntityResponse> {
@@ -51,7 +51,9 @@ export class PostFavoriteService {
     );
   }
 
-  async getFavoriteList(userId: string): Promise<PostFavoriteEntityResponse[]> {
+  async getFavoriteListByUserId(
+    userId: string,
+  ): Promise<PostFavoriteEntityResponse[]> {
     return await this.postFavoriteRepository.getListByUserId(userId);
   }
 }
